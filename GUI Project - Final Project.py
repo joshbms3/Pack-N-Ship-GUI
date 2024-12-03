@@ -27,6 +27,8 @@ root.geometry('300x350')
 root_menu = Menu(root)
 root.config(menu=root_menu)
 
+empty_stock = {'Perches': 0, 'Hanging Toys': 0, 'Foot Toys': 0}
+
 def menus():
     file_menu = Menu(root_menu)
     root_menu.add_cascade(label="File", menu=file_menu)
@@ -37,6 +39,7 @@ def menus():
     file_menu.add_separator()
     file_menu.add_command(label="Import...")
     file_menu.add_command(label="Export...")
+
     edit_menu = Menu(root_menu)
     root_menu.add_cascade(label="Edit", menu=edit_menu)
     edit_menu.add_command(label="Cut")
@@ -48,36 +51,25 @@ def menus():
     help_menu.add_command(label="(under construction)")
 menus()
 
-
-def check_file():
-    listOfFiles = os.listdir(os.getcwd())
-    for filename in listOfFiles:
-        if "KJPNSinventory" in filename:
-            inv_file = open("KJPNSinventory.txt", 'r')
-            read_inv_file = inv_file.read()
-            return read_inv_file
-    else:
-        inv_file = open("KJPNSinventory.txt", "w")
-        empty_stock = {'Perches':0,'Hanging Toys':0,'Foot Toys':0}
-        inv_file.write(str(empty_stock))
-        inv_file = open("KJPNSinventory.txt", "r")
-        read_inv_file = inv_file.read()
-        return read_inv_file
-
 def perches_calc():
     global perches
-    if perch_entry.get() == "":
+    if perch_entry.get().isdigit() is False:
         perches = stock['Perches']
+        perch_entry.delete(0,END)
+        input_check = Label(top, text="Please enter a valid number.")
+        input_check.pack()
     else:
-
         new_perches = perch_entry.get()
         perches = int(stock['Perches']) + int(new_perches)
         perch_entry.delete(0,END)
 
 def hanging_toys_calc():
     global hangingToys
-    if hanging_toy_entry.get() == "":
+    if hanging_toy_entry.get().isdigit() is False:
         hangingToys = stock['Hanging Toys']
+        hanging_toy_entry.delete(0,END)
+        input_check = Label(top, text="Please enter a valid number.")
+        input_check.pack()
     else:
         new_hanging_toys = hanging_toy_entry.get()
         hangingToys = int(stock['Hanging Toys']) + int(new_hanging_toys)
@@ -85,8 +77,11 @@ def hanging_toys_calc():
 
 def foot_toys_calc():
     global footToys
-    if foot_toy_entry.get() == "":
+    if foot_toy_entry.get().isdigit() is False:
         footToys = stock['Foot Toys']
+        foot_toy_entry.delete(0,END)
+        input_check = Label(top, text="Please enter a valid number.")
+        input_check.pack()
     else:
         new_foot_toys = foot_toy_entry.get()
         footToys = int(stock['Foot Toys']) + int(new_foot_toys)
@@ -102,19 +97,23 @@ def go_to():
     if choice == "Pricing":
         pricing()
 
-
 def commit():
+    perches_calc(),hanging_toys_calc(),foot_toys_calc()
+    global inventory_label
     list_of_files = os.listdir(os.getcwd())
-    stock.update({'Perches': perches})
-    stock.update({'Hanging Toys': hangingToys})
-    stock.update({'Foot Toys': footToys})
+    stock.update({'Perches': perches,'Hanging Toys': hangingToys,'Foot Toys': footToys})
     for filename in list_of_files:
         if "KJPNSinventory" in filename:
             inv_file = open("KJPNSinventory.txt", 'w')
             inv_file.write(str(stock))
-            inventory_label = Label(top,text=f"\nYour new updated inventory is:\n{stock}")
-            inventory_label.pack()
-            return
+    try:
+        if inventory_label:
+                inventory_label.destroy()
+    except NameError:
+        pass
+    inventory_label = Label(top, text=f"\nYour new updated inventory is:\n{str(stock).strip('{}').replace("'", "")}")
+    inventory_label.pack()
+    return
 
 def inventory():
     global top
@@ -160,37 +159,75 @@ def pricing():
     top.geometry('300x300')
     pass
 
+def check_file():
+    listOfFiles = os.listdir(os.getcwd())
+    for filename in listOfFiles:
+        if "KJPNSinventory" in filename:
+            inv_file = open("KJPNSinventory.txt", 'r')
+            read_inv_file = inv_file.read()
+            inv_file.close()
+            global dashboard_label
+            dashboard_label = (Label(text=f"\nAs of today your current inventory is: \n {read_inv_file.strip('{}').replace("'", "")}\n"))
+            dashboard_label.pack()
+            new_dashboard_label = dashboard_label
+            return new_dashboard_label
+    else:
+        inv_file = open("KJPNSinventory.txt", "w")
+        inv_file.write(str(empty_stock))
+        inv_file.close()
+        inv_file = open("KJPNSinventory.txt", "r")
+        read_inv_file = inv_file.read()
+        dashboard_label = (Label(text=f"\nAs of today your current inventory is: \n {read_inv_file.strip('{}').replace("'", "")}\n"))
+        dashboard_label.pack()
+        inv_file.close()
+        return read_inv_file
+
+
+
+def refresh():
+    dashboard_label.destroy()
+    check_file().pack()
+
+def clear_inventory():
+    inv_file = open("KJPNSinventory.txt", "w")
+    inv_file.write(str(empty_stock))
+    inv_file.close()
+    dashboard_label.destroy()
+    check_file().pack()
+
+
 def welcome():
-    welcomeMsg = (Label(root, text="\nWelcome to Kaylae and Joshua's Pack 'N Ship Manager!\n"))
-    welcomeMsg.pack()
-    welcomeImg = ImageTk.PhotoImage(Image.open("vibrantparrots.png"))
-    welcomeImgLabel= (Label(root, image=welcomeImg))
-    welcomeImgLabel.image = welcomeImg
-    welcomeImgLabel.pack()
+    welcome_msg = (Label(root, text="\nWelcome to Kaylae and Joshua's Pack 'N Ship Manager!\n"))
+    welcome_msg.pack()
+    welcome_img = ImageTk.PhotoImage(Image.open("vibrantparrots.png"))
+    welcome_img_label = (Label(root, image=welcome_img))
+    welcome_img_label.image = welcome_img
+    welcome_img_label.pack()
+    clear_inventory_button = Button(root, text="Clear inventory", command=clear_inventory)
+    clear_inventory_button.pack(side="bottom")
+    refresh_button = Button(root, text="Refresh", command=refresh)
+    refresh_button.pack(side="bottom")
 welcome()
 
 def navigation():
-    navFrame = LabelFrame(root, text="Navigation",padx=50)
+    navFrame = LabelFrame(root, text="Navigation", padx=50)
     navFrame.pack()
 
     navigation = [
         "Inventory",
-        "Pricing",
+            "Pricing",
     ]
     global selection
     selection = StringVar()
     selection.set("Dashboard")
 
-    drop = OptionMenu(navFrame,selection, *navigation)
-    drop.grid(row=0,column=0)
-    goButton = Button(navFrame, text="Go", command=go_to,pady=2)
-    goButton.grid(row=0,column=1)
+    drop = OptionMenu(navFrame, selection, *navigation)
+    drop.grid(row=0, column=0)
+    goButton = Button(navFrame, text="Go", command=go_to, pady=2)
+    goButton.grid(row=0, column=1)
+
 navigation()
 
-def check_inventory():
-    dashboardInvMsg = (Label(text=f"\nAs of today your current inventory is: \n {check_file()}"))
-    dashboardInvMsg.pack()
-check_inventory()
-
+check_file()
 
 root.mainloop()
