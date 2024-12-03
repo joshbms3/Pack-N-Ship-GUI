@@ -98,7 +98,6 @@ def go_to():
         pricing()
 
 def commit():
-    perches_calc(),hanging_toys_calc(),foot_toys_calc()
     global inventory_label
     list_of_files = os.listdir(os.getcwd())
     stock.update({'Perches': perches,'Hanging Toys': hangingToys,'Foot Toys': footToys})
