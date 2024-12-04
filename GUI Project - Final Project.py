@@ -28,6 +28,7 @@ root_menu = Menu(root)
 root.config(menu=root_menu)
 
 empty_stock = {'Perches': 0, 'Hanging Toys': 0, 'Foot Toys': 0}
+check_values = True
 
 def menus():
     file_menu = Menu(root_menu)
@@ -51,13 +52,19 @@ def menus():
     help_menu.add_command(label="(under construction)")
 menus()
 
+def input_verify():
+    global inputs_checked,check_values
+    inventory_label = Label(top, text="Please enter a valid number")
+    if check_values is True:
+        check_values = False
+        return inventory_label.pack()
+
 def perches_calc():
     global perches
     if perch_entry.get().isdigit() is False:
         perches = stock['Perches']
         perch_entry.delete(0,END)
-        input_check = Label(top, text="Please enter a valid number.")
-        input_check.pack()
+        input_verify()
     else:
         new_perches = perch_entry.get()
         perches = int(stock['Perches']) + int(new_perches)
@@ -68,8 +75,7 @@ def hanging_toys_calc():
     if hanging_toy_entry.get().isdigit() is False:
         hangingToys = stock['Hanging Toys']
         hanging_toy_entry.delete(0,END)
-        input_check = Label(top, text="Please enter a valid number.")
-        input_check.pack()
+        input_verify()
     else:
         new_hanging_toys = hanging_toy_entry.get()
         hangingToys = int(stock['Hanging Toys']) + int(new_hanging_toys)
@@ -80,8 +86,7 @@ def foot_toys_calc():
     if foot_toy_entry.get().isdigit() is False:
         footToys = stock['Foot Toys']
         foot_toy_entry.delete(0,END)
-        input_check = Label(top, text="Please enter a valid number.")
-        input_check.pack()
+        input_verify()
     else:
         new_foot_toys = foot_toy_entry.get()
         footToys = int(stock['Foot Toys']) + int(new_foot_toys)
@@ -100,7 +105,15 @@ def go_to():
 def commit():
     global inventory_label
     list_of_files = os.listdir(os.getcwd())
-    stock.update({'Perches': perches,'Hanging Toys': hangingToys,'Foot Toys': footToys})
+    try:
+        stock.update({'Perches': perches,'Hanging Toys': hangingToys,'Foot Toys': footToys})
+    except NameError:
+        global check_values
+        if check_values is True:
+            inventory_label = Label(top, text="Please input a value and try again")
+            check_values = False
+        return inventory_label.pack()
+
     for filename in list_of_files:
         if "KJPNSinventory" in filename:
             inv_file = open("KJPNSinventory.txt", 'w')
@@ -110,7 +123,7 @@ def commit():
                 inventory_label.destroy()
     except NameError:
         pass
-    inventory_label = Label(top, text=f"\nYour new updated inventory is:\n{str(stock).strip('{}').replace("'", "")}")
+    inventory_label = Label(top, text=f"\nYour new updated inventory is:\n{str(stock).strip('{}').replace("'", "")}\n\n")
     inventory_label.pack()
     return
 
@@ -119,7 +132,7 @@ def inventory():
     top = Toplevel()
     top.title("Inventory")
     top.iconbitmap()
-    top.geometry('615x600')
+    top.geometry('615x615')
     global stock
     stock = eval(open("KJPNSinventory.txt", 'r').read())
     inventory_img = ImageTk.PhotoImage(Image.open("warehousewithbirds.png"))
