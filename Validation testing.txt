@@ -1,0 +1,23 @@
+Validation testing
+
+Test #1:
+Attempt to enter negative numbers into entry field
+
+Results: "Please enter a valid number" printed as a label.
+
+Pass, an error is generated to user in label format.
+
+
+Test #2:
+Attempt to enter no numbers / no entry in to the entry field
+Reults: Upon clicking commit changes, "Please enter a valid number" printed as a label.
+
+Pass, an error is generated to user in label format.
+
+Test #3:
+Attempt to enter a non-integer, such as a character/string
+
+Results: No change, no label is printed, no errorsa are committed, after clicking commit
+changes, data is not lost, corrupt or altered. 
+
+Pass, but no error is generated to the user.
