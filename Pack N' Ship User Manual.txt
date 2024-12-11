@@ -1,0 +1,24 @@
+							.,;-:'"`^-={User Manual}=-^`"':-;,.
+
+Intro: Thank you for checking out my Pack N' Ship GUI application. This application primary creates (if does not exist already) or writes (if already exists) to a KJPNSinventory.txt file in the apps directory. It is primary designed to keep track of inventory as we hand craft them, sell them, and/or pack them away. Currently, it only keeps track of inventory.
+
+
+1.) When the Pack 'N Ship is first launched a file named KJPNSinventory.txt is created in the application directory with an empty stock "{'Perches': 0, 'Hanging Toys': 0, 'Foot Toys': 0}", this text is read into Python using the 'eval' function, meaning it converts this string into a Python code, in this case a dictionary with a key : value format, for easy updating & access.
+
+2.) Using the 'Navigation' frame you can select the 'Inventory' selection and click 'Go', this will open the inventory window where you can update the stock of your choice.
+
+3.) In the inventory window, you can update each item individually, (due to input validation it only accepts positive integers) insert your number of choice into each line for perches, hanging toys, and foot toys, and then click 'Submit. This will perform the calculations within the app. (Please keep in mind if a value is not input into the entry box and you click submit, no action will occur, other than a label telling you to input a valid number, this will also occur if you try the following step without any valid inputs)
+
+4.) Once you are done inputting your inventory updates, you can click on 'Commit Changes', your newly updated inventory will then be printed to the screen. (although the data is stored in a text file in dictionary format, so python can read it, it is displayed to the user in a more diserable format.)
+
+5.) In the inventory window, you can utilize the 'Close' button on the inventory window which will close the inventory window and return you to the dashboard, this will also refresh the stock on the main GUI window.
+
+6.) Lastly, when you are back at the main GUI window, you can click Refresh to update your stock, if you still haven't closed the inventory window the refresh command would have not been called. Once your stock is updated, the file has already been saved to the directory of your program and you can now exit. 
+
+Outro: Thank you very much for checking out my Pack N' Ship GUI app, I hope you enjoyed it and had clear navigation throughout the app. 
+
+Have a good day!
+
+Creator: Joshua Barroso
+Business: Kiki's Bazaar & Bird Shoppe
+

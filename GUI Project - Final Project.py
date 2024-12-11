@@ -23,7 +23,7 @@ import os
 root = Tk()
 root.title("Pack 'N Ship Manager")
 root.iconbitmap()
-root.geometry('300x350')
+root.geometry('300x380')
 root_menu = Menu(root)
 root.config(menu=root_menu)
 
@@ -52,8 +52,15 @@ def menus():
     help_menu.add_command(label="(under construction)")
 menus()
 
+def quit_program():
+    root.quit()
+
+def close_window():
+    top.destroy()
+    refresh()
+
 def input_verify():
-    global inputs_checked,check_values
+    global inputs_checked,check_values,inventory_label
     inventory_label = Label(top, text="Please enter a valid number")
     if check_values is True:
         check_values = False
@@ -69,7 +76,6 @@ def perches_calc():
         new_perches = perch_entry.get()
         perches = int(stock['Perches']) + int(new_perches)
         perch_entry.delete(0,END)
-
 def hanging_toys_calc():
     global hangingToys
     if hanging_toy_entry.get().isdigit() is False:
@@ -160,6 +166,8 @@ def inventory():
     foot_toy_entry.pack()
     foot_toy_button = Button(top, text="Submit", command=foot_toys_calc)
     foot_toy_button.pack()
+    close_button = Button(top, text="Close", command=close_window)
+    close_button.pack(side="bottom")
     commit_changes = Button(top, text="Commit changes", command=commit)
     commit_changes.pack(side="bottom")
 
@@ -215,6 +223,8 @@ def welcome():
     welcome_img_label = (Label(root, image=welcome_img))
     welcome_img_label.image = welcome_img
     welcome_img_label.pack()
+    quit_button = Button(root, text="Quit", command=quit_program)
+    quit_button.pack(side="bottom")
     clear_inventory_button = Button(root, text="Clear inventory", command=clear_inventory)
     clear_inventory_button.pack(side="bottom")
     refresh_button = Button(root, text="Refresh", command=refresh)
