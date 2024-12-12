@@ -21,3 +21,24 @@ Results: No change, no label is printed, no errorsa are committed, after clickin
 changes, data is not lost, corrupt or altered. 
 
 Pass, but no error is generated to the user.
+
+Fixes:
+
+Multiple fixes were performed to complete the functionality of this GUI, some fixes I performed was
+implementing the try-except method to ensure errors are generated properly and do not break the program. 
+
+Ensuring all labels, buttons and images get packed appropriately using the side="bottom" 
+statement within the pack() tkinter function. 
+
+Sadly, a lot of fixes were taken care of using the global statement, which now know is a bad 
+practice as it can cause a lot of bugs with the program due to issues with the GUI not registerring
+things properly, but I do believe my app works fine in its current state.
+
+The last fix I can think of mentioning is the input validation method, although an error does not pop
+up on the screen to warn the users of an invalid input, there is a label that gets presented to the screen.
+However, this only happens until a proper input is entered, then it does not pop up again until the user re-opens the Inventory window. This is to prevent the window from getting flooded with input validation labels. Even though it only occurs once, it does continue to only allow valid integers as inputs.
+
+Thank you very much for checking out my app!
+
+Created by:
+Joshua Barroso
